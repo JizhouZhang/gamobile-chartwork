@@ -59,7 +59,7 @@ export const useTemperatureData = () => {
           total_num_measurement = mockdata.tempdata.length;
           appendLog(`total_num_measurement: ${total_num_measurement}`);
 
-          device_interval = 20 * 60;  // hardcoded to 20 minutes
+          device_interval = 20 * 60; // hardcoded to 20 minutes
           device_interval = device_interval * 1000; // convert to milliseconds
           appendLog(`device_interval: ${device_interval}`);
 
@@ -85,28 +85,31 @@ export const useTemperatureData = () => {
             (resp.ndefMessage[i].payload[33] << 24);
           appendLog(`device_status: ${device_status}`);
 
-          const startTimeTs = new Date().getTime() / 1000 - (device_interval / 1000) * total_num_measurement; 
+          const startTimeTs =
+            new Date().getTime() / 1000 -
+            (device_interval / 1000) * total_num_measurement;
 
-          let deviceCurrentTimeTs = new Date().getTime()/1000;
+          let deviceCurrentTimeTs = new Date().getTime() / 1000;
           const sysCurrentTime = new Date();
           appendLog(
             `device current time: ${new Date(deviceCurrentTimeTs * 1000)}, ` +
-            `measure start time: ${new Date(startTimeTs * 1000)}, ` +
-            `system current time: ${sysCurrentTime}}`,
+              `measure start time: ${new Date(startTimeTs * 1000)}, ` +
+              `system current time: ${sysCurrentTime}}`,
           );
-          device_factor = ((sysCurrentTime.getTime() / 1000) - startTimeTs) / (deviceCurrentTimeTs - startTimeTs);
+          device_factor =
+            (sysCurrentTime.getTime() / 1000 - startTimeTs) /
+            (deviceCurrentTimeTs - startTimeTs);
           appendLog(`device Factor: ${device_factor}`);
 
           const startDateTime = new Date(startTimeTs * 1000);
           let actualInterval = device_interval * device_factor;
-          console.log(`actual interval: ${actualInterval}`)
+          console.log(`actual interval: ${actualInterval}`);
           setDeviceInterval(actualInterval);
 
           let measuredEndTime = new Date(
-            startDateTime.getTime() +
-              actualInterval * total_num_measurement,
+            startDateTime.getTime() + actualInterval * total_num_measurement,
           );
-          appendLog(`actual end time: ${measuredEndTime}`)
+          appendLog(`actual end time: ${measuredEndTime}`);
           setStartDate(startDateTime);
           setEndDate(measuredEndTime);
         }
@@ -144,7 +147,6 @@ export const useTemperatureData = () => {
 
     setScanningStatus('Start reading measurements');
     while (offset < total_num_measurement) {
-     
       measurements.push(...mockdata.tempdata);
       setScanningStatus(`Reading progress: 100%`);
       offset = total_num_measurement;

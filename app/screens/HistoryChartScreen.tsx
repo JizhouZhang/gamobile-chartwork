@@ -1,13 +1,29 @@
-import React from 'react';
-import {View, StyleSheet, Button, Text} from 'react-native';
+import React, {useState} from 'react';
+import {View, StyleSheet, Button, Text, TouchableOpacity} from 'react-native';
 
 import BarChartComponent from '../components/BarChartComponent';
-import {convertTemperatureRecordsToChartData} from '../hooks/ChartDataHelper';
+import {
+  convertTemperatureRecordsToChartData,
+  getPasttMonthStartAndEndDate,
+  getPasttWeekStartAndEndDate,
+} from '../hooks/ChartDataHelper';
 import TemperatureDataHelper from '../hooks/TemperatureDataHelper';
 import {mockData} from '../constants/mock_data';
 import {useTemperatureData} from '../hooks/useTemperatureData';
+import CustomModal from '../components/CustomModal';
+import moment from 'moment';
 
 const HistoryChartScreen = () => {
+  const [selectedArrange, setSelectedArrange] = useState('All');
+  const [isModalCustom, setIsModalCustom] = useState(false);
+  const [graphData, setGraphData] = useState([]);
+  const currentDate = new Date();
+  const [startDateCustom, setStartDateCustom] = useState(
+    currentDate - 7 * 24 * 60 * 60 * 1000,
+  );
+
+  const [endDateCustom, setEndDateCustom] = useState(new Date());
+
   const {
     temperatureData,
     getAllMeasurements,
@@ -21,6 +37,7 @@ const HistoryChartScreen = () => {
   if (temperatureData.values.length === 0) {
     temperatureData.values = mockData;
   }
+
   if (isScanning) {
     return (
       <View style={styles.container}>
@@ -28,28 +45,185 @@ const HistoryChartScreen = () => {
       </View>
     );
   }
-  const temperatureRecord = TemperatureDataHelper.generateTemperatureRecords(
-    temperatureData.values,
-    startDate,
-    endDate,
-    deviceInterval,
-  );
-  const chartData = convertTemperatureRecordsToChartData(
-    temperatureRecord,
-    deviceInterval,
-  );
+
+  function clickOnAll() {
+    setSelectedArrange('All');
+    const temperatureRecord = TemperatureDataHelper.generateTemperatureRecords(
+      temperatureData.values,
+      startDate,
+      endDate,
+      deviceInterval,
+    );
+
+    const chartData = convertTemperatureRecordsToChartData(
+      temperatureRecord,
+      deviceInterval,
+    );
+
+    setGraphData(chartData);
+  }
+
+  function clickOnMonth() {
+    setSelectedArrange('Month');
+    const {start, end} = getPasttMonthStartAndEndDate();
+    const temperatureRecord = TemperatureDataHelper.generateTemperatureRecords(
+      temperatureData.values,
+      start,
+      end,
+      deviceInterval,
+    );
+    const chartData = convertTemperatureRecordsToChartData(
+      temperatureRecord,
+      deviceInterval,
+    );
+    console.log({
+      temperatureData,
+      start: start.toString(),
+      end: end.toString(),
+      temperatureRecord,
+    });
+    setGraphData(chartData);
+  }
+
+  function clickOnWeek() {
+    setSelectedArrange('Week');
+    const {start, end} = getPasttWeekStartAndEndDate();
+    const temperatureRecord = TemperatureDataHelper.generateTemperatureRecords(
+      temperatureData.values,
+      start,
+      end,
+      deviceInterval,
+    );
+    const chartData = convertTemperatureRecordsToChartData(
+      temperatureRecord,
+      deviceInterval,
+    );
+    setGraphData(chartData);
+  }
+
+  function clickOnCustom() {
+    setSelectedArrange('Custom');
+    setIsModalCustom(false);
+    const temperatureRecord = TemperatureDataHelper.generateTemperatureRecords(
+      temperatureData.values,
+      new Date(startDateCustom),
+      endDateCustom,
+      deviceInterval,
+    );
+
+    const chartData = convertTemperatureRecordsToChartData(
+      temperatureRecord,
+      deviceInterval,
+    );
+
+    setGraphData(chartData);
+  }
 
   return (
     <View style={styles.container}>
-      <BarChartComponent chartData={chartData} edgeHours={18} />
+      <View style={styles.selectedView}>
+        <TouchableOpacity
+          onPress={() => clickOnAll()}
+          style={[
+            styles.innerView,
+            {borderTopLeftRadius: 25, borderBottomLeftRadius: 25},
+            selectedArrange == 'All' && {
+              backgroundColor: 'gray',
+            },
+          ]}>
+          <Text
+            style={[
+              selectedArrange == 'All' && {
+                color: 'white',
+              },
+            ]}>
+            All
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => clickOnMonth()}
+          style={[
+            styles.innerView,
+            selectedArrange == 'Month' && {
+              backgroundColor: 'gray',
+            },
+          ]}>
+          <Text
+            style={[
+              selectedArrange == 'Month' && {
+                color: 'white',
+              },
+            ]}>
+            Past Month
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => clickOnWeek()}
+          style={[
+            styles.innerView,
+            selectedArrange == 'Week' && {
+              backgroundColor: 'gray',
+            },
+          ]}>
+          <Text
+            style={[
+              selectedArrange == 'Week' && {
+                color: 'white',
+              },
+            ]}>
+            Past Week
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setIsModalCustom(!isModalCustom);
+          }}
+          style={[
+            styles.innerView,
+            {
+              borderTopRightRadius: 25,
+              borderBottomRightRadius: 25,
+              borderRightWidth: 0,
+            },
+            selectedArrange == 'Custom' && {
+              backgroundColor: 'gray',
+            },
+          ]}>
+          <Text
+            style={[
+              selectedArrange == 'Custom' && {
+                color: 'white',
+              },
+            ]}>
+            Custom
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <BarChartComponent chartData={graphData} edgeHours={18} />
+
       {isScanning ? (
         <Text style={styles.blackText}>Scanning {scanningPercentage}%</Text>
       ) : (
-        <Button title="Scan" onPress={getAllMeasurements} />
+        <View style={{marginBottom: 30}}>
+          <Button title="Scan" onPress={getAllMeasurements} />
+          <Text style={styles.blackText}>
+            Total measured {graphData.length} day
+            {graphData.length > 1 ? 's' : ''}
+          </Text>
+        </View>
       )}
-      <Text style={styles.blackText}>
-        Total measured {chartData.length} day{chartData.length > 1 ? 's' : ''}
-      </Text>
+      {isModalCustom && (
+        <CustomModal
+          isModal={isModalCustom}
+          setIsModal={setIsModalCustom}
+          startDate={new Date(startDateCustom)}
+          endDate={new Date(endDateCustom)}
+          setStartDate={(value: Date) => setStartDateCustom(value)}
+          setEndDate={setEndDateCustom}
+          updatebutton={clickOnCustom}
+        />
+      )}
     </View>
   );
 };
@@ -57,9 +231,9 @@ const HistoryChartScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
+    backgroundColor: 'white',
   },
   chartStyle: {
     width: 350, // adjust as needed
@@ -106,6 +280,23 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  selectedView: {
+    height: 45,
+    backgroundColor: 'white',
+    width: '90%',
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: 'gray',
+    marginTop: 10,
+    flexDirection: 'row',
+  },
+  innerView: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 0.25,
+    borderRightWidth: 1,
+    borderColor: 'gray',
   },
 });
 

@@ -375,7 +375,7 @@ PODS:
   - React-jsinspector (0.72.12)
   - React-logger (0.72.12):
     - glog
-  - react-native-date-picker (4.4.0):
+  - react-native-date-picker (5.0.0):
     - React-Core
   - react-native-nfc-manager (3.14.13):
     - React-Core
@@ -749,7 +749,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 95bdf0ab46024ca9849e08739b6abd8fe489cd33
   React-jsinspector: 8e291ed0ab371314de269001d6b9b25db6aabf42
   React-logger: d4010de0b0564e63637ad08373bc73b5d919974b
-  react-native-date-picker: ebcb936d72fc3bbde0dea47c6641e913523231ca
+  react-native-date-picker: 656d78c3f8a5e79bc1642b8d1c587ce10aab2195
   react-native-nfc-manager: e0c1d6e7065657d9151b279a459cdded0677c0f1
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   react-native-skia: d97289c60355a8a2098203aec5c793276bbcc71e
@@ -783,4 +783,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: dbf1974b2ebe126f1f240894f63d79c924b20c9e
 
-COCOAPODS: 1.14.2
+COCOAPODS: 1.15.2

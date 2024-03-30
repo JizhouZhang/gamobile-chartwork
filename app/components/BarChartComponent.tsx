@@ -1,11 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Dimensions} from 'react-native';
 import {
   VictoryBar,
   VictoryChart,
   VictoryAxis,
   VictoryLine,
   VictoryTheme,
+  VictoryLabel,
 } from 'victory-native';
 
 // Interface for the chart data
@@ -31,7 +32,6 @@ const BarChartComponent: React.FC<BarChartComponentProps> = ({
   chartData = [],
   edgeHours,
 }) => {
-  // Check if chartData is empty or undefined
   if (!chartData || chartData.length === 0) {
     return (
       <View style={styles.noCharts}>
@@ -40,32 +40,62 @@ const BarChartComponent: React.FC<BarChartComponentProps> = ({
     );
   }
 
+  const minChartWidth = Dimensions.get('window').width;
+  const barWidth = 10;
+  const barSpacing = 20;
+  const chartWidth = chartData.length * (barWidth + barSpacing);
+
   return (
-    <View>
-      <VictoryChart
-        theme={VictoryTheme.material}
-        domainPadding={{x: 10}}
-        scale={{x: 'time'}}>
-        <VictoryAxis tickFormat={x => formatDate(new Date(x))} />
-        <VictoryAxis dependentAxis />
-        <VictoryBar
-          data={chartData}
-          x="x"
-          y="y"
-          style={{
-            data: {fill: ({datum}) => (datum.y > edgeHours ? 'green' : 'red')},
-          }}
-        />
-        <VictoryLine
-          data={[
-            {x: chartData[0].x, y: edgeHours},
-            {x: chartData[chartData.length - 1].x, y: edgeHours},
-          ]}
-          style={{
-            data: {stroke: 'blue', strokeWidth: 2},
-          }}
-        />
-      </VictoryChart>
+    <View style={{flex: 0.8}}>
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        style={{flexGrow: 1}}
+        horizontal>
+        <VictoryChart
+          theme={VictoryTheme.material}
+          domainPadding={{x: 10}}
+          scale={{x: 'time'}}
+          width={chartWidth < minChartWidth ? minChartWidth : chartWidth}
+          style={{parent: {minWidth: Dimensions.get('window').width}}}>
+          <VictoryAxis
+            tickFormat={x => formatDate(new Date(x))}
+            style={{
+              tickLabels: {
+                angle: 40,
+              },
+            }}
+            tickLabelComponent={
+              <VictoryLabel
+                dx={20}
+                style={{
+                  marginTop: 20,
+                  fontSize: 10,
+                }}
+              />
+            }
+          />
+          <VictoryAxis dependentAxis />
+          <VictoryBar
+            data={chartData}
+            x="x"
+            y="y"
+            style={{
+              data: {
+                fill: ({datum}) => (datum.y > edgeHours ? 'green' : 'red'),
+              },
+            }}
+          />
+          <VictoryLine
+            data={[
+              {x: chartData[0].x, y: edgeHours},
+              {x: chartData[chartData.length - 1].x, y: edgeHours},
+            ]}
+            style={{
+              data: {stroke: 'blue', strokeWidth: 2},
+            }}
+          />
+        </VictoryChart>
+      </ScrollView>
     </View>
   );
 };

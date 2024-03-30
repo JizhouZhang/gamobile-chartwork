@@ -54,8 +54,48 @@ export const convertTemperatureRecordsToChartData = (
     ).length;
 
     // deviceInterval is in ms format
-    const hoursOfWearing = intervalsAboveThreshold * (deviceInterval / 1000) / 3600
+    const hoursOfWearing =
+      (intervalsAboveThreshold * (deviceInterval / 1000)) / 3600;
 
     return {x: date, y: hoursOfWearing};
   });
 };
+
+export function getPasttMonthStartAndEndDate() {
+  const currentDate = new Date();
+  const firstDayOfPreviousMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() - 1,
+    1,
+  );
+  const lastDayOfPreviousMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    0,
+  );
+  return {
+    start: firstDayOfPreviousMonth,
+    end: lastDayOfPreviousMonth,
+  };
+}
+
+export function getPasttWeekStartAndEndDate() {
+  const currentDate = new Date();
+
+  const currentDayOfWeek = currentDate.getDay();
+
+  const diffToSunday = currentDayOfWeek;
+
+  const diffToSaturday = 6 - currentDayOfWeek;
+
+  const startOfWeek = new Date(currentDate);
+  startOfWeek.setDate(currentDate.getDate() - diffToSunday - 7);
+
+  const endOfWeek = new Date(currentDate);
+  endOfWeek.setDate(currentDate.getDate() + diffToSaturday - 7);
+
+  return {
+    start: startOfWeek,
+    end: endOfWeek,
+  };
+}
