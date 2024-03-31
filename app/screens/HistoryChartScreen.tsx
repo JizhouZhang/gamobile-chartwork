@@ -38,6 +38,13 @@ const HistoryChartScreen = () => {
     temperatureData.values = mockData;
   }
 
+  const temperatureRecord = TemperatureDataHelper.initTemperatureRecords(
+    temperatureData.values,
+    startDate,
+    endDate,
+    deviceInterval,
+  );
+
   if (isScanning) {
     return (
       <View style={styles.container}>
@@ -48,12 +55,6 @@ const HistoryChartScreen = () => {
 
   function clickOnAll() {
     setSelectedArrange('All');
-    const temperatureRecord = TemperatureDataHelper.generateTemperatureRecords(
-      temperatureData.values,
-      startDate,
-      endDate,
-      deviceInterval,
-    );
 
     const chartData = convertTemperatureRecordsToChartData(
       temperatureRecord,
@@ -66,21 +67,20 @@ const HistoryChartScreen = () => {
   function clickOnMonth() {
     setSelectedArrange('Month');
     const {start, end} = getPasttMonthStartAndEndDate();
-    const temperatureRecord = TemperatureDataHelper.generateTemperatureRecords(
-      temperatureData.values,
+    const rangedTemperatureRecord = TemperatureDataHelper.generateTemperatureRecordWithRange(
+      temperatureRecord,
       start,
-      end,
-      deviceInterval,
+      end
     );
     const chartData = convertTemperatureRecordsToChartData(
-      temperatureRecord,
+      rangedTemperatureRecord,
       deviceInterval,
     );
     console.log({
       temperatureData,
       start: start.toString(),
       end: end.toString(),
-      temperatureRecord,
+      rangedTemperatureRecord,
     });
     setGraphData(chartData);
   }
@@ -88,14 +88,13 @@ const HistoryChartScreen = () => {
   function clickOnWeek() {
     setSelectedArrange('Week');
     const {start, end} = getPasttWeekStartAndEndDate();
-    const temperatureRecord = TemperatureDataHelper.generateTemperatureRecords(
-      temperatureData.values,
+    const rangedTemperatureRecord = TemperatureDataHelper.generateTemperatureRecordWithRange(
+      temperatureRecord,
       start,
-      end,
-      deviceInterval,
+      end
     );
     const chartData = convertTemperatureRecordsToChartData(
-      temperatureRecord,
+      rangedTemperatureRecord,
       deviceInterval,
     );
     setGraphData(chartData);
@@ -104,15 +103,14 @@ const HistoryChartScreen = () => {
   function clickOnCustom() {
     setSelectedArrange('Custom');
     setIsModalCustom(false);
-    const temperatureRecord = TemperatureDataHelper.generateTemperatureRecords(
-      temperatureData.values,
+    const rangedTemperatureRecord = TemperatureDataHelper.generateTemperatureRecordWithRange(
+      temperatureRecord,
       new Date(startDateCustom),
-      endDateCustom,
-      deviceInterval,
+      endDateCustom
     );
 
     const chartData = convertTemperatureRecordsToChartData(
-      temperatureRecord,
+      rangedTemperatureRecord,
       deviceInterval,
     );
 

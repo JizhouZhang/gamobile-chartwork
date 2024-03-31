@@ -15,7 +15,7 @@ export class TemperatureDataHelper {
    * @param interval Interval between temperature readings in milliseconds.
    * @returns {TemperatureRecord} A dictionary with corrected timestamps as keys and temperatures as values.
    */
-  public static generateTemperatureRecords(
+  public static initTemperatureRecords(
     temperatures: number[],
     startTime: Date,
     endTime: Date,
@@ -46,6 +46,22 @@ export class TemperatureDataHelper {
     }
 
     return temperatureRecord;
+  }
+
+  public static generateTemperatureRecordWithRange(temperatureRecord: TemperatureRecord, startDate: Date, endDate: Date): TemperatureRecord {
+    const startTimeMs = startDate.getTime();
+    const endTimeMs = endDate.getTime();
+
+    const record: TemperatureRecord = {};
+
+    for (let timestamp in temperatureRecord) {
+      const time = parseInt(timestamp);
+      if (time >= startTimeMs && time <= endTimeMs) {
+        record[time] = temperatureRecord[time];
+      }
+    }
+
+    return record;
   }
 
   /**
