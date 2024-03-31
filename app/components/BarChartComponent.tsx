@@ -46,7 +46,7 @@ const BarChartComponent: React.FC<BarChartComponentProps> = ({
   const chartWidth = chartData.length * (barWidth + barSpacing);
 
   return (
-    <View style={{flex: 0.8}}>
+    <View style={{flex: 0.75}}>
       <ScrollView
         showsHorizontalScrollIndicator={false}
         style={{flexGrow: 1}}
@@ -81,7 +81,8 @@ const BarChartComponent: React.FC<BarChartComponentProps> = ({
             y="y"
             style={{
               data: {
-                fill: ({datum}) => (datum.y > edgeHours ? 'green' : 'red'),
+                fill: ({datum}) =>
+                  datum.y > edgeHours ? '#ECCCFF' : '#ECCCFF',
               },
             }}
           />

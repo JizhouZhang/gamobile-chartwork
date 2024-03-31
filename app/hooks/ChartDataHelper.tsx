@@ -99,3 +99,20 @@ export function getPasttWeekStartAndEndDate() {
     end: endOfWeek,
   };
 }
+
+export function AchievementScoreCalculation(array: number[]) {
+  let length = array.length;
+  for (let i = 0; i < length; i++) {
+    if (array[i] > 24) {
+      array[i] = array[i] / length;
+    }
+  }
+
+  let sum = array.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0,
+  );
+
+  let average = sum / length;
+  return (average / 24) * 100;
+}
