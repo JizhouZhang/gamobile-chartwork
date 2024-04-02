@@ -115,6 +115,6 @@ const styles = StyleSheet.create({
   },
   btnTxt: {fontSize: 16, color: 'white'},
 
-  dateTxt: {fontSize: 16, fontWeight: 'bold'},
-  selectDateTxt: {fontSize: 14},
+  dateTxt: {fontSize: 16, fontWeight: 'bold', color: 'black'},
+  selectDateTxt: {fontSize: 14, color: 'black'},
 });

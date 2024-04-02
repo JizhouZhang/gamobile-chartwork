@@ -155,6 +155,7 @@ const HistoryChartScreen = () => {
             ]}>
             <Text
               style={[
+                {color: 'black'},
                 selectedArrange == 'All' && {
                   color: 'white',
                 },
@@ -172,6 +173,7 @@ const HistoryChartScreen = () => {
             ]}>
             <Text
               style={[
+                {color: 'black'},
                 selectedArrange == 'Month' && {
                   color: 'white',
                 },
@@ -189,6 +191,7 @@ const HistoryChartScreen = () => {
             ]}>
             <Text
               style={[
+                {color: 'black'},
                 selectedArrange == 'Week' && {
                   color: 'white',
                 },
@@ -213,6 +216,7 @@ const HistoryChartScreen = () => {
             ]}>
             <Text
               style={[
+                {color: 'black'},
                 selectedArrange == 'Custom' && {
                   color: 'white',
                 },

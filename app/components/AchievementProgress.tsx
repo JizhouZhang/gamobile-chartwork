@@ -19,7 +19,7 @@ export default function AchievementProgress(props: AchievementProgressProps) {
         Your Achievement Score
       </Text>
       <CircularProgress
-        value={resultValue}
+        value={resultValue ? resultValue : 0}
         key={`circular-progress-${resultValue}`}
         maxValue={Number(100)}
         radius={90}
@@ -27,7 +27,7 @@ export default function AchievementProgress(props: AchievementProgressProps) {
         initialValue={0}
         activeStrokeWidth={45}
         inActiveStrokeWidth={45}
-        duration={5000}
+        duration={1000}
         clockwise={true}
         progressValueFontSize={20}
         activeStrokeColor={'#89B27C'}

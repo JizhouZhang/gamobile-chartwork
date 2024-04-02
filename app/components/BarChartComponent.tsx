@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import {View, Text, StyleSheet, ScrollView, Dimensions} from 'react-native';
 import {
@@ -22,10 +23,7 @@ interface BarChartComponentProps {
 }
 
 const formatDate = (date: Date) => {
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
+  return moment(date).format('MM/DD/YYYY');
 };
 
 const BarChartComponent: React.FC<BarChartComponentProps> = ({
