@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, ScrollView, Dimensions} from 'react-native';
 import {
   VictoryBar,
@@ -9,7 +9,6 @@ import {
   VictoryTheme,
   VictoryLabel,
 } from 'victory-native';
-
 // Interface for the chart data
 interface ChartData {
   x: Date;
@@ -37,14 +36,14 @@ const BarChartComponent: React.FC<BarChartComponentProps> = ({
       </View>
     );
   }
+  const [selectedBar, setSelectedBar] = useState(null);
 
   const minChartWidth = Dimensions.get('window').width;
   const barWidth = 10;
   const barSpacing = 20;
   const chartWidth = chartData.length * (barWidth + barSpacing);
-
   return (
-    <View style={{flex: 0.75}}>
+    <View style={{}}>
       <ScrollView
         showsHorizontalScrollIndicator={false}
         style={{flexGrow: 1}}
@@ -77,12 +76,34 @@ const BarChartComponent: React.FC<BarChartComponentProps> = ({
             data={chartData}
             x="x"
             y="y"
+            labels={({datum}) =>
+              datum.x === selectedBar ? formatDate(new Date(datum.x)) : ''
+            }
             style={{
               data: {
                 fill: ({datum}) =>
-                  datum.y > edgeHours ? '#ECCCFF' : '#ECCCFF',
+                  datum.y > edgeHours ? '#4cc652' : '#4cc652',
               },
             }}
+            events={[
+              {
+                target: 'data',
+                eventHandlers: {
+                  onPressIn: () => {
+                    return [
+                      {
+                        target: 'data',
+                        mutation: props => {
+                          console.log('Bar clicked:', props.datum);
+                          setSelectedBar(props.datum.x);
+                          // Perform your action here. For debugging, console.log is a good start.
+                        },
+                      },
+                    ];
+                  },
+                },
+              },
+            ]}
           />
           <VictoryLine
             data={[
@@ -90,7 +111,7 @@ const BarChartComponent: React.FC<BarChartComponentProps> = ({
               {x: chartData[chartData.length - 1].x, y: edgeHours},
             ]}
             style={{
-              data: {stroke: 'blue', strokeWidth: 2},
+              data: {stroke: '#4cc652', strokeWidth: 2},
             }}
           />
         </VictoryChart>

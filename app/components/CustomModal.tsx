@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   },
   btnView: {
     alignSelf: 'center',
-    backgroundColor: '#3a608f',
+    backgroundColor: '#4cc652',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginTop: 30,
   },
-  btnTxt: {fontSize: 16, color: 'white'},
+  btnTxt: {fontSize: 16, fontWeight: '700', color: 'white'},
 
   dateTxt: {fontSize: 16, fontWeight: 'bold', color: 'black'},
   selectDateTxt: {fontSize: 14, color: 'black'},

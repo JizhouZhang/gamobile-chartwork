@@ -7,6 +7,7 @@ import FeedbackScreen from './app/screens/FeedbackScreen';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {RouteProp} from '@react-navigation/native';
+import {Platform} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,8 +41,13 @@ const App = () => {
         initialRouteName="Wear Logs"
         screenOptions={({route}) => ({
           tabBarIcon: props => renderIcon({...props, route}),
-          tabBarActiveTintColor: 'tomato',
-          tabBarInactiveTintColor: 'gray',
+          tabBarActiveTintColor: '#4cc652',
+          tabBarInactiveTintColor: 'black',
+          headerShown: true,
+          headerTitleAlign: 'center',
+          headerTitleStyle: {fontSize: 20},
+          headerStyle: {borderBottomWidth: 0, borderColor: 'white'},
+          marginBottom: 10,
         })}>
         <Tab.Screen name="Wear Logs" component={HistoryChartScreen} />
         <Tab.Screen name="Tag Configurations" component={ConfigScreen} />

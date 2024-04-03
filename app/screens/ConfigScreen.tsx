@@ -5,6 +5,8 @@ import {EVENT_TYPES} from '../components/constants';
 import {TemperatureDataHelper} from '../hooks/TemperatureDataHelper';
 import Share from 'react-native-share';
 import RNFS from 'react-native-fs';
+import ButtonView from '../components/ButtonView';
+import Images from '../theme/Images';
 
 // Pre-step, call this before any NFC operations
 NfcManager.start();
@@ -106,7 +108,7 @@ function ConfigScreen() {
 
     if (resp) {
       for (let i = 0; i < resp.ndefMessage.length; i++) {
-        console.log("Jay debug:", resp.ndefMessage[i].payload);
+        console.log('Jay debug:', resp.ndefMessage[i].payload);
         if (resp.ndefMessage[i].payload[0] === 72) {
           appendLog(`config: ${resp.ndefMessage[i].payload}`);
           const result =
@@ -328,7 +330,7 @@ function ConfigScreen() {
     }
 
     await delay(1000); // delay 1 second
-    
+
     let device_id = undefined;
 
     const get_nfc_id_cmd = [9, 0];
@@ -466,29 +468,56 @@ function ConfigScreen() {
 
   return (
     <View style={styles.wrapper}>
-      <Button title="Read temperature" onPress={getAllMeasurements} />
-      <Separator />
-      <Button title="Get configuration" onPress={getConfiguration} />
-      <Separator />
-      <Button title="Reset Tag" onPress={setConfiguration} />
-      <Separator />
-      <Button title="Get event" onPress={getEvents} />
-      <Separator />
-      <Button title="Get Id" onPress={getUid} />
-      <Separator />
-      <Button title="Get version" onPress={getVersion} />
-      <Separator />
-      <ScrollView style={styles.logBox}>
-        {logs.map((log, index) => (
-          <Text key={index} style={styles.logText}>
-            {log}
-          </Text>
-        ))}
+      <ScrollView
+        style={{flex: 1, width: '100%'}}
+        contentContainerStyle={{
+          flexGrow: 1,
+          alignItems: 'center',
+        }}
+        showsVerticalScrollIndicator={false}>
+        {false &&
+          logs.map((log, index) => (
+            <Text key={index} style={styles.logText}>
+              {log}
+            </Text>
+          ))}
+        <ButtonView
+          title="Red Temperature"
+          image={Images.thermometer}
+          onPress={getAllMeasurements}
+        />
+        <ButtonView
+          title="Get configuration"
+          image={Images.configure}
+          onPress={getConfiguration}
+        />
+        <ButtonView
+          title="Reset Tag"
+          image={Images.resetTag}
+          onPress={setConfiguration}
+        />
+        <ButtonView
+          title="Get event"
+          image={Images.GetEvent}
+          onPress={getEvents}
+        />
+        <ButtonView title="Get Id" image={Images.GetId} onPress={getUid} />
+        <ButtonView
+          title="Get version"
+          image={Images.GetVersion}
+          onPress={getVersion}
+        />
+        <ButtonView
+          title="Clear logs"
+          image={Images.Clearlogs}
+          onPress={clearLogs}
+        />
+        <ButtonView
+          title="Share CSV"
+          image={Images.csv}
+          onPress={() => shareCsvByEmail()}
+        />
       </ScrollView>
-      <Separator />
-      <Button title="Clear logs" onPress={clearLogs} />
-      <Separator />
-      <Button title="Share CSV" onPress={() => shareCsvByEmail()} />
     </View>
   );
 }
@@ -498,6 +527,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
+    backgroundColor: 'white',
   },
   title: {
     marginBottom: 20,

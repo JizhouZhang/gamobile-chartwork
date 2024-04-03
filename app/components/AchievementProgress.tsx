@@ -15,9 +15,6 @@ export default function AchievementProgress(props: AchievementProgressProps) {
 
   return (
     <View style={{flex: 1, marginTop: 20}}>
-      <Text style={{fontSize: 16, fontWeight: '700', marginBottom: 10}}>
-        Your Achievement Score
-      </Text>
       <CircularProgress
         value={resultValue ? resultValue : 0}
         key={`circular-progress-${resultValue}`}
@@ -30,7 +27,7 @@ export default function AchievementProgress(props: AchievementProgressProps) {
         duration={1000}
         clockwise={true}
         progressValueFontSize={20}
-        activeStrokeColor={'#89B27C'}
+        activeStrokeColor={'#4cc652'}
         inActiveStrokeColor={'#DFEEDB'}
         progressFormatter={value => {
           'worklet';

@@ -1,10 +1,19 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Linking} from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+  ScrollView,
+} from 'react-native';
+import Images from '../theme/Images';
 
 const FeedbackScreen = () => {
   // Function to handle the email action
   const handleEmail = () => {
-    const email = 'support@bracewyse.com'; // Replace with your support email
+    const email = 'info@bracewyse.com';
     const subject = encodeURIComponent('Feedback from BraceWyse User');
     const body = encodeURIComponent('Here is my feedback:\n');
 
@@ -12,30 +21,49 @@ const FeedbackScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>BraceWyse Values Your Feedback</Text>
-      <Text style={styles.subtitle}>Help us to improve your experience</Text>
-      <View style={styles.content}>
+    <ScrollView
+      style={{backgroundColor: 'white'}}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.container}>
+      <Image
+        style={{height: 300, width: 400}}
+        source={Images.sendMail}
+        resizeMode="cover"
+      />
+      <View>
+        <Text style={styles.title}>BraceWyse Values Your Feedback</Text>
         <Text style={styles.textContent}>
-          Your opinions and suggestions are important to us. Please share your
-          thoughts about our app, what you like, what could be improved, and any
-          features you'd like to see in the future.
+          The BraceWyse sensors were developed in 2021 in the beautiful Pacific
+          Northwest. Combined with compactness and efficiency, the BraceWyse can
+          be used on TLSOs, AFO, Cranial helmets, and any other applications you
+          might be interested in knowing wearing time and pattern. Raw data can
+          be exported for further studies. We offer two versions of the
+          BraceWyse sensors: BraceWyse and the BraceWyse-mini. The differences
+          between the two are physical dimensions and battery choices. Both
+          versions provide up to 322 days of data storage (at 15-minute sampling
+          interval) and it can be cleared and reused by app settings.
+        </Text>
+        <Text style={[styles.textContent, {marginTop: 10}]}>
+          We are committed to continuous improvements. If you have any
+          questions, comments, and suggestions please contact us at
+          info@bracewyse.com.
         </Text>
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleEmail}>
-        <Text style={styles.buttonText}>Write to BraceWyse support</Text>
+      <TouchableOpacity onPress={handleEmail} style={styles.button}>
+        <Text style={{color: 'white', fontWeight: '500', fontSize: 18}}>
+          Write to BraceWyse support
+        </Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     padding: 20,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ffffff', // Light background
+    backgroundColor: '#ffffff',
   },
   title: {
     fontSize: 24,
@@ -52,14 +80,27 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   textContent: {
-    fontSize: 16,
-    textAlign: 'center',
-    color: '#333333', // Dark font color for content
+    fontSize: 14,
+    color: 'black',
+    lineHeight: 22,
   },
   button: {
-    backgroundColor: '#007bff', // Blue button background
-    padding: 10,
-    borderRadius: 5,
+    height: 54,
+    borderRadius: 12,
+    backgroundColor: '#4cc652',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.221,
+    shadowRadius: 2.11,
+    elevation: 2,
+    marginTop: 20,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
   },
   buttonText: {
     color: 'white', // White text on the button for contrast

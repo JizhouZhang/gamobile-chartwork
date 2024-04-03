@@ -20,6 +20,7 @@ import {useTemperatureData} from '../hooks/useTemperatureData';
 import CustomModal from '../components/CustomModal';
 import moment from 'moment';
 import AchievementProgress from '../components/AchievementProgress';
+import CustomNavBar from '../components/CustomNavbar';
 
 const HistoryChartScreen = () => {
   const [selectedArrange, setSelectedArrange] = useState('All');
@@ -137,112 +138,202 @@ const HistoryChartScreen = () => {
     setGraphData(chartData);
   }
 
+  const renderTypeSelected = () => {
+    return (
+      <View style={styles.selectedView}>
+        <TouchableOpacity
+          onPress={() => clickOnAll()}
+          style={[
+            styles.innerView,
+            {borderTopLeftRadius: 12, borderBottomLeftRadius: 12},
+            selectedArrange == 'All' && {
+              backgroundColor: '#4cc652',
+            },
+          ]}>
+          <Text
+            style={[
+              {color: 'black'},
+              selectedArrange == 'All' && {
+                color: 'white',
+              },
+            ]}>
+            All
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => clickOnMonth()}
+          style={[
+            styles.innerView,
+            selectedArrange == 'Month' && {
+              backgroundColor: '#4cc652',
+            },
+          ]}>
+          <Text
+            style={[
+              {color: 'black'},
+              selectedArrange == 'Month' && {
+                color: 'white',
+              },
+            ]}>
+            Past Month
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => clickOnWeek()}
+          style={[
+            styles.innerView,
+            selectedArrange == 'Week' && {
+              backgroundColor: '#4cc652',
+            },
+          ]}>
+          <Text
+            style={[
+              {color: 'black'},
+              selectedArrange == 'Week' && {
+                color: 'white',
+              },
+            ]}>
+            Past Week
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setIsModalCustom(!isModalCustom);
+          }}
+          style={[
+            styles.innerView,
+            {
+              borderTopRightRadius: 12,
+              borderBottomRightRadius: 12,
+              borderRightWidth: 0,
+            },
+            selectedArrange == 'Custom' && {
+              backgroundColor: '#4cc652',
+            },
+          ]}>
+          <Text
+            style={[
+              {color: 'black'},
+              selectedArrange == 'Custom' && {
+                color: 'white',
+              },
+            ]}>
+            Custom
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+  const renderGraph = () => {
+    return (
+      <View
+        style={{
+          backgroundColor: 'white',
+          borderRadius: 12,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.221,
+          shadowRadius: 2.11,
+          elevation: 2,
+          paddingBottom: 10,
+          flex: 0.7,
+          marginTop: 20,
+          width: '100%',
+        }}>
+        <Text
+          style={{
+            margin: 20,
+            marginBottom: 0,
+            fontSize: 16,
+            fontWeight: '700',
+            color: 'black',
+          }}>
+          Graph Data
+        </Text>
+        <BarChartComponent chartData={graphData} edgeHours={18} />
+      </View>
+    );
+  };
+
+  const renderProgreeCircle = () => {
+    return (
+      <View
+        style={{
+          backgroundColor: 'white',
+          borderRadius: 12,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.221,
+          shadowRadius: 2.11,
+          elevation: 2,
+          flex: 0.3,
+          width: '100%',
+          marginTop: 20,
+        }}>
+        <Text
+          style={{
+            margin: 20,
+            marginBottom: 0,
+            fontSize: 16,
+            fontWeight: '700',
+            color: 'black',
+          }}>
+          Your Achievement Score
+        </Text>
+        <View style={{alignItems: 'center'}}>
+          <AchievementProgress chartData={graphData} />
+          <Text style={styles.blackText}>
+            Total measured {graphData.length} day
+            {graphData.length > 1 ? 's' : ''}
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <ScrollView
       contentContainerStyle={styles.container}
       showsVerticalScrollIndicator={false}
-      style={{backgroundColor: 'white', flex: 1}}>
-      <View style={{flex: 0.7, alignItems: 'center'}}>
-        <View style={styles.selectedView}>
-          <TouchableOpacity
-            onPress={() => clickOnAll()}
-            style={[
-              styles.innerView,
-              {borderTopLeftRadius: 25, borderBottomLeftRadius: 25},
-              selectedArrange == 'All' && {
-                backgroundColor: 'gray',
-              },
-            ]}>
-            <Text
-              style={[
-                {color: 'black'},
-                selectedArrange == 'All' && {
-                  color: 'white',
-                },
-              ]}>
-              All
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => clickOnMonth()}
-            style={[
-              styles.innerView,
-              selectedArrange == 'Month' && {
-                backgroundColor: 'gray',
-              },
-            ]}>
-            <Text
-              style={[
-                {color: 'black'},
-                selectedArrange == 'Month' && {
-                  color: 'white',
-                },
-              ]}>
-              Past Month
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => clickOnWeek()}
-            style={[
-              styles.innerView,
-              selectedArrange == 'Week' && {
-                backgroundColor: 'gray',
-              },
-            ]}>
-            <Text
-              style={[
-                {color: 'black'},
-                selectedArrange == 'Week' && {
-                  color: 'white',
-                },
-              ]}>
-              Past Week
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setIsModalCustom(!isModalCustom);
-            }}
-            style={[
-              styles.innerView,
-              {
-                borderTopRightRadius: 25,
-                borderBottomRightRadius: 25,
-                borderRightWidth: 0,
-              },
-              selectedArrange == 'Custom' && {
-                backgroundColor: 'gray',
-              },
-            ]}>
-            <Text
-              style={[
-                {color: 'black'},
-                selectedArrange == 'Custom' && {
-                  color: 'white',
-                },
-              ]}>
-              Custom
-            </Text>
-          </TouchableOpacity>
-        </View>
+      style={{
+        backgroundColor: 'white',
+        flex: 1,
+        paddingHorizontal: 10,
+      }}>
+      {renderTypeSelected()}
+      {renderGraph()}
+      {renderProgreeCircle()}
 
-        <BarChartComponent chartData={graphData} edgeHours={18} />
-      </View>
-      <View style={{flex: 0.3, alignItems: 'center'}}>
-        <AchievementProgress chartData={graphData} />
-        {isScanning ? (
-          <Text style={styles.blackText}>Scanning {scanningPercentage}%</Text>
-        ) : (
-          <View style={{marginVertical: 30}}>
-            <Button title="Scan" onPress={getAllMeasurements} />
-            <Text style={styles.blackText}>
-              Total measured {graphData.length} day
-              {graphData.length > 1 ? 's' : ''}
-            </Text>
-          </View>
-        )}
-      </View>
-
+      <TouchableOpacity
+        onPress={() => getAllMeasurements()}
+        style={{
+          height: 54,
+          borderRadius: 12,
+          backgroundColor: '#4cc652',
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.221,
+          shadowRadius: 2.11,
+          elevation: 2,
+          marginTop: 20,
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: 30,
+        }}>
+        <Text style={{color: 'white', fontWeight: '500', fontSize: 18}}>
+          Scan
+        </Text>
+      </TouchableOpacity>
       {isModalCustom && (
         <CustomModal
           isModal={isModalCustom}
@@ -261,7 +352,6 @@ const HistoryChartScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: 'white',
   },
@@ -270,6 +360,7 @@ const styles = StyleSheet.create({
   },
   blackText: {
     color: 'black',
+    marginVertical: 10,
   },
   centeredView: {
     flex: 1,
@@ -314,8 +405,7 @@ const styles = StyleSheet.create({
   selectedView: {
     height: 45,
     backgroundColor: 'white',
-    width: '90%',
-    borderRadius: 25,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: 'gray',
     marginTop: 10,
