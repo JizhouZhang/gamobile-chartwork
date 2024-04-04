@@ -7,6 +7,9 @@ const GetVersion = require('../icon/GetVersion.png');
 const Clearlogs = require('../icon/Clearlogs.png');
 const csv = require('../icon/csv.png');
 const sendMail = require('../icon/sendMail.png');
+const history = require('../icon/history.png');
+const settings = require('../icon/settings.png');
+const phone = require('../icon/phone.png');
 
 export default {
   thermometer,
@@ -18,4 +21,7 @@ export default {
   Clearlogs,
   csv,
   sendMail,
+  history,
+  settings,
+  phone,
 };

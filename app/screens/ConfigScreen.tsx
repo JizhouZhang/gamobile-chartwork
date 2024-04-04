@@ -11,8 +11,6 @@ import Images from '../theme/Images';
 // Pre-step, call this before any NFC operations
 NfcManager.start();
 
-const Separator = () => <View style={styles.separator} />;
-
 function ConfigScreen() {
   const [logs, setLogs] = useState([]);
   // Add current tag configuration to state
@@ -531,34 +529,6 @@ const styles = StyleSheet.create({
   },
   title: {
     marginBottom: 20,
-  },
-  titleText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  fixToText: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    // add margin between buttons
-    margin: 10,
-  },
-  separator: {
-    marginVertical: 8,
-    borderBottomColor: '#737373',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'space-between',
-    padding: 10,
-  },
-  logBox: {
-    flexGrow: 1, // Allows the ScrollView to expand
-    maxHeight: 200, // Maximum height of the ScrollView
-    borderWidth: 1,
-    borderColor: 'gray',
-    padding: 10,
-    marginBottom: 10,
   },
   logText: {
     fontSize: 14,

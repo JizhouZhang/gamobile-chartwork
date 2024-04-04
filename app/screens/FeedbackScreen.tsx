@@ -50,9 +50,7 @@ const FeedbackScreen = () => {
         </Text>
       </View>
       <TouchableOpacity onPress={handleEmail} style={styles.button}>
-        <Text style={{color: 'white', fontWeight: '500', fontSize: 18}}>
-          Write to BraceWyse support
-        </Text>
+        <Text style={styles.buttonText}>Write to BraceWyse support</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -69,21 +67,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#333333', // Dark font color for better contrast
-  },
-  subtitle: {
-    fontSize: 18,
-    marginBottom: 20,
-    color: '#555555', // Slightly lighter font color for the subtitle
-  },
-  content: {
-    marginBottom: 20,
+    color: '#333333',
   },
   textContent: {
     fontSize: 14,
     color: 'black',
     lineHeight: 22,
   },
+
   button: {
     height: 54,
     borderRadius: 12,
@@ -102,10 +93,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 10,
   },
-  buttonText: {
-    color: 'white', // White text on the button for contrast
-    fontSize: 16,
-  },
+  buttonText: {color: 'white', fontWeight: '500', fontSize: 18},
 });
 
 export default FeedbackScreen;

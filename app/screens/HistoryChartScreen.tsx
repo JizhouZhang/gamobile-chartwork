@@ -1,26 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import {
-  View,
+  ScrollView,
   StyleSheet,
-  Button,
   Text,
   TouchableOpacity,
-  ScrollView,
+  View,
 } from 'react-native';
-
+import AchievementProgress from '../components/AchievementProgress';
 import BarChartComponent from '../components/BarChartComponent';
+import CustomModal from '../components/CustomModal';
+import {mockData} from '../constants/mock_data';
 import {
   convertTemperatureRecordsToChartData,
   getPasttMonthStartAndEndDate,
   getPasttWeekStartAndEndDate,
 } from '../hooks/ChartDataHelper';
 import TemperatureDataHelper from '../hooks/TemperatureDataHelper';
-import {mockData} from '../constants/mock_data';
 import {useTemperatureData} from '../hooks/useTemperatureData';
-import CustomModal from '../components/CustomModal';
-import moment from 'moment';
-import AchievementProgress from '../components/AchievementProgress';
-import CustomNavBar from '../components/CustomNavbar';
 
 const HistoryChartScreen = () => {
   const [selectedArrange, setSelectedArrange] = useState('All');
@@ -30,7 +26,6 @@ const HistoryChartScreen = () => {
   const [startDateCustom, setStartDateCustom] = useState(
     currentDate - 7 * 24 * 60 * 60 * 1000,
   );
-
   const [endDateCustom, setEndDateCustom] = useState(new Date());
 
   const {
@@ -224,35 +219,11 @@ const HistoryChartScreen = () => {
       </View>
     );
   };
+
   const renderGraph = () => {
     return (
-      <View
-        style={{
-          backgroundColor: 'white',
-          borderRadius: 12,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.221,
-          shadowRadius: 2.11,
-          elevation: 2,
-          paddingBottom: 10,
-          flex: 0.7,
-          marginTop: 20,
-          width: '100%',
-        }}>
-        <Text
-          style={{
-            margin: 20,
-            marginBottom: 0,
-            fontSize: 16,
-            fontWeight: '700',
-            color: 'black',
-          }}>
-          Graph Data
-        </Text>
+      <View style={styles.graphContainer}>
+        <Text style={styles.hoursTxt}>Graph Data</Text>
         <BarChartComponent chartData={graphData} edgeHours={18} />
       </View>
     );
@@ -260,32 +231,8 @@ const HistoryChartScreen = () => {
 
   const renderProgreeCircle = () => {
     return (
-      <View
-        style={{
-          backgroundColor: 'white',
-          borderRadius: 12,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.221,
-          shadowRadius: 2.11,
-          elevation: 2,
-          flex: 0.3,
-          width: '100%',
-          marginTop: 20,
-        }}>
-        <Text
-          style={{
-            margin: 20,
-            marginBottom: 0,
-            fontSize: 16,
-            fontWeight: '700',
-            color: 'black',
-          }}>
-          Your Achievement Score
-        </Text>
+      <View style={styles.processCircleContainer}>
+        <Text style={styles.progressTxt}>Your Achievement Score</Text>
         <View style={{alignItems: 'center'}}>
           <AchievementProgress chartData={graphData} />
           <Text style={styles.blackText}>
@@ -309,27 +256,9 @@ const HistoryChartScreen = () => {
       {renderTypeSelected()}
       {renderGraph()}
       {renderProgreeCircle()}
-
       <TouchableOpacity
         onPress={() => getAllMeasurements()}
-        style={{
-          height: 54,
-          borderRadius: 12,
-          backgroundColor: '#4cc652',
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.221,
-          shadowRadius: 2.11,
-          elevation: 2,
-          marginTop: 20,
-          width: '100%',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: 30,
-        }}>
+        style={styles.scanBtn}>
         <Text style={{color: 'white', fontWeight: '500', fontSize: 18}}>
           Scan
         </Text>
@@ -355,53 +284,80 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
   },
-  chartStyle: {
-    width: 350, // adjust as needed
+
+  graphContainer: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.221,
+    shadowRadius: 2.11,
+    elevation: 2,
+    paddingBottom: 10,
+    flex: 0.7,
+    marginTop: 20,
+    width: '100%',
   },
+
+  processCircleContainer: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.221,
+    shadowRadius: 2.11,
+    elevation: 2,
+    flex: 0.3,
+    width: '100%',
+    marginTop: 20,
+  },
+
+  hoursTxt: {
+    margin: 20,
+    marginBottom: 0,
+    fontSize: 16,
+    fontWeight: '700',
+    color: 'black',
+  },
+
+  progressTxt: {
+    margin: 20,
+    marginBottom: 0,
+    fontSize: 16,
+    fontWeight: '700',
+    color: 'black',
+  },
+
+  scanBtn: {
+    height: 54,
+    borderRadius: 12,
+    backgroundColor: '#4cc652',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.221,
+    shadowRadius: 2.11,
+    elevation: 2,
+    marginTop: 20,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 30,
+  },
+
   blackText: {
     color: 'black',
     marginVertical: 10,
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-    marginTop: 20, // Add a top margin to create space above the button
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  // Add or update the modalView style if necessary
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
+
   selectedView: {
     height: 45,
     backgroundColor: 'white',
@@ -411,6 +367,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'row',
   },
+
   innerView: {
     alignItems: 'center',
     justifyContent: 'center',

@@ -4,35 +4,29 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HistoryChartScreen from './app/screens/HistoryChartScreen';
 import ConfigScreen from './app/screens/ConfigScreen';
 import FeedbackScreen from './app/screens/FeedbackScreen';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-
 import {RouteProp} from '@react-navigation/native';
-import {Platform} from 'react-native';
+import {Image, Platform, Text, View} from 'react-native';
+import Images from './app/theme/Images';
 
 const Tab = createBottomTabNavigator();
 
 type RenderIconProps = {
   focused: boolean;
-  color: string;
-  size: number;
-  route: RouteProp<Record<string, object | undefined>, string>;
+  title: string;
+  image: HTMLImageElement;
 };
 
-const renderIcon = ({focused, color, size, route}: RenderIconProps) => {
-  let iconName: string;
-
-  if (route.name === 'Wear Logs') {
-    iconName = 'history';
-  } else if (route.name === 'Tag Configurations') {
-    iconName = 'settings';
-  } else if (route.name === 'Feedback') {
-    iconName = 'phone';
-  } else {
-    iconName = 'default-icon-name'; // Provide a default icon name
-  }
-
-  return <Icon name={iconName} size={size} color={color} />;
-};
+const renderIcon = ({focused, image, title}: RenderIconProps) => (
+  <View style={{alignItems: 'center'}}>
+    <Image
+      source={image}
+      style={[{height: 24, width: 24}, focused && {tintColor: '#4cc652'}]}
+    />
+    <Text style={[{marginTop: 8, fontSize: 12}, focused && {color: '#4cc652'}]}>
+      {title}
+    </Text>
+  </View>
+);
 
 const App = () => {
   return (
@@ -43,15 +37,45 @@ const App = () => {
           tabBarIcon: props => renderIcon({...props, route}),
           tabBarActiveTintColor: '#4cc652',
           tabBarInactiveTintColor: 'black',
+          tabBarShowLabel: false,
           headerShown: true,
           headerTitleAlign: 'center',
           headerTitleStyle: {fontSize: 20},
           headerStyle: {borderBottomWidth: 0, borderColor: 'white'},
           marginBottom: 10,
+          tabBarStyle: {
+            height: Platform.OS == 'android' ? 70 : 90,
+            backgroundColor: 'white',
+          },
         })}>
-        <Tab.Screen name="Wear Logs" component={HistoryChartScreen} />
-        <Tab.Screen name="Tag Configurations" component={ConfigScreen} />
-        <Tab.Screen name="Feedback" component={FeedbackScreen} />
+        <Tab.Screen
+          options={({route}) => ({
+            tabBarIcon: ({focused}) =>
+              renderIcon({focused, image: Images.history, title: 'Wear Logs'}),
+          })}
+          name="Wear Logs"
+          component={HistoryChartScreen}
+        />
+        <Tab.Screen
+          options={({route}) => ({
+            tabBarIcon: ({focused}) =>
+              renderIcon({
+                focused,
+                image: Images.settings,
+                title: 'Tag Configurations',
+              }),
+          })}
+          name="Tag Configurations"
+          component={ConfigScreen}
+        />
+        <Tab.Screen
+          options={({route}) => ({
+            tabBarIcon: ({focused}) =>
+              renderIcon({focused, image: Images.phone, title: 'Feedback'}),
+          })}
+          name="Feedback"
+          component={FeedbackScreen}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
