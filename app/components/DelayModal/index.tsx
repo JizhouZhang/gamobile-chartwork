@@ -136,9 +136,9 @@ const DataMints = [
 export default function DelayModal(props: CustomModalProps) {
   const {isModal, setIsModal, onPressOk} = props;
 
-  const [valueDay, setValueDay] = useState('');
-  const [valueHrs, setValueHrs] = useState('');
-  const [valueMints, setValueMints] = useState('');
+  const [valueDay, setValueDay] = useState('0');
+  const [valueHrs, setValueHrs] = useState('0');
+  const [valueMints, setValueMints] = useState('0');
   return (
     <View>
       <Modal
@@ -154,39 +154,48 @@ export default function DelayModal(props: CustomModalProps) {
               justifyContent: 'space-between',
               marginTop: 20,
             }}>
-            <Dropdown
-              style={styles.dropdown}
-              data={DataDay}
-              labelField="label"
-              valueField="value"
-              placeholder="Day"
-              value={valueDay}
-              onChange={item => {
-                setValueDay(item.value);
-              }}
-            />
-            <Dropdown
-              style={styles.dropdown}
-              data={DataHrs}
-              labelField="label"
-              valueField="value"
-              placeholder="Hrs"
-              value={valueHrs}
-              onChange={item => {
-                setValueHrs(item.value);
-              }}
-            />
-            <Dropdown
-              style={styles.dropdown}
-              data={DataMints}
-              labelField="label"
-              valueField="value"
-              placeholder="Minutes"
-              value={valueMints}
-              onChange={item => {
-                setValueMints(item.value);
-              }}
-            />
+            <View style={{flex: 0.33, height: 60}}>
+              <Text style={{fontSize: 16, fontWeight: 'bold'}}>Day</Text>
+              <Dropdown
+                style={[styles.dropdown, {flex: 1}]}
+                data={DataDay}
+                labelField="label"
+                valueField="value"
+                placeholder="Day"
+                value={valueDay}
+                onChange={item => {
+                  setValueDay(item.value);
+                }}
+              />
+            </View>
+            <View style={{flex: 0.33, height: 60}}>
+              <Text style={{fontSize: 16, fontWeight: 'bold'}}>Hrs</Text>
+              <Dropdown
+                style={[styles.dropdown, {flex: 1}]}
+                data={DataHrs}
+                labelField="label"
+                valueField="value"
+                placeholder="Hrs"
+                value={valueHrs}
+                onChange={item => {
+                  setValueHrs(item.value);
+                }}
+              />
+            </View>
+            <View style={{flex: 0.33, height: 60}}>
+              <Text style={{fontSize: 16, fontWeight: 'bold'}}>Minutes</Text>
+              <Dropdown
+                style={[styles.dropdown, {flex: 1}]}
+                data={DataMints}
+                labelField="label"
+                valueField="value"
+                placeholder="Minutes"
+                value={valueMints}
+                onChange={item => {
+                  setValueMints(item.value);
+                }}
+              />
+            </View>
           </View>
           <View
             style={{
