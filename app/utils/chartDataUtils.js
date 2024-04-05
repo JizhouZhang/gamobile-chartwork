@@ -1,3 +1,5 @@
+import Toast from 'react-native-toast-message';
+
 // Utility function to prepare data for the Contribution Graph
 export const prepareContributionData = (data, thresholds) => {
   // Logic to filter and prepare data for the past 3 months
@@ -16,4 +18,17 @@ export const prepareContributionData = (data, thresholds) => {
         count: tempCelsius > threshold ? 1 : 0,
       };
     });
+};
+
+export const topAlert = (message, alertType = 'success') => {
+  Toast.show({
+    type: alertType,
+    text1: 'Alert!',
+    text2: message,
+    duration: 5000,
+    text1Style: {
+      fontSize: 15,
+      color: 'black',
+    },
+  });
 };

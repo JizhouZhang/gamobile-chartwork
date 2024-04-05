@@ -7,6 +7,8 @@ import FeedbackScreen from './app/screens/FeedbackScreen';
 import {RouteProp} from '@react-navigation/native';
 import {Image, Platform, Text, View} from 'react-native';
 import Images from './app/theme/Images';
+import MessageBar from './app/components/MessageBar';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,54 +32,61 @@ const renderIcon = ({focused, image, title}: RenderIconProps) => (
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        initialRouteName="Wear Logs"
-        screenOptions={({route}) => ({
-          tabBarIcon: props => renderIcon({...props, route}),
-          tabBarActiveTintColor: '#4cc652',
-          tabBarInactiveTintColor: 'black',
-          tabBarShowLabel: false,
-          headerShown: true,
-          headerTitleAlign: 'center',
-          headerTitleStyle: {fontSize: 20},
-          headerStyle: {borderBottomWidth: 0, borderColor: 'white'},
-          marginBottom: 10,
-          tabBarStyle: {
-            height: Platform.OS == 'android' ? 70 : 90,
-            backgroundColor: 'white',
-          },
-        })}>
-        <Tab.Screen
-          options={({route}) => ({
-            tabBarIcon: ({focused}) =>
-              renderIcon({focused, image: Images.history, title: 'Wear Logs'}),
-          })}
-          name="Wear Logs"
-          component={HistoryChartScreen}
-        />
-        <Tab.Screen
-          options={({route}) => ({
-            tabBarIcon: ({focused}) =>
-              renderIcon({
-                focused,
-                image: Images.settings,
-                title: 'Tag Configurations',
-              }),
-          })}
-          name="Tag Configurations"
-          component={ConfigScreen}
-        />
-        <Tab.Screen
-          options={({route}) => ({
-            tabBarIcon: ({focused}) =>
-              renderIcon({focused, image: Images.phone, title: 'Feedback'}),
-          })}
-          name="Feedback"
-          component={FeedbackScreen}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Tab.Navigator
+          initialRouteName="Wear Logs"
+          screenOptions={({route}) => ({
+            tabBarIcon: props => renderIcon({...props, route}),
+            tabBarActiveTintColor: '#4cc652',
+            tabBarInactiveTintColor: 'black',
+            tabBarShowLabel: false,
+            headerShown: true,
+            headerTitleAlign: 'center',
+            headerTitleStyle: {fontSize: 20},
+            headerStyle: {borderBottomWidth: 0, borderColor: 'white'},
+            marginBottom: 10,
+            tabBarStyle: {
+              height: Platform.OS == 'android' ? 70 : 90,
+              backgroundColor: 'white',
+            },
+          })}>
+          <Tab.Screen
+            options={({route}) => ({
+              tabBarIcon: ({focused}) =>
+                renderIcon({
+                  focused,
+                  image: Images.history,
+                  title: 'Wear Logs',
+                }),
+            })}
+            name="Wear Logs"
+            component={HistoryChartScreen}
+          />
+          <Tab.Screen
+            options={({route}) => ({
+              tabBarIcon: ({focused}) =>
+                renderIcon({
+                  focused,
+                  image: Images.settings,
+                  title: 'Tag Configurations',
+                }),
+            })}
+            name="Tag Configurations"
+            component={ConfigScreen}
+          />
+          <Tab.Screen
+            options={({route}) => ({
+              tabBarIcon: ({focused}) =>
+                renderIcon({focused, image: Images.phone, title: 'Feedback'}),
+            })}
+            name="Feedback"
+            component={FeedbackScreen}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+      <MessageBar />
+    </SafeAreaProvider>
   );
 };
 

@@ -17,6 +17,11 @@ import {
 } from '../hooks/ChartDataHelper';
 import TemperatureDataHelper from '../hooks/TemperatureDataHelper';
 import {useTemperatureData} from '../hooks/useTemperatureData';
+import {topAlert} from '../utils/chartDataUtils';
+import ButtonView from '../components/ButtonView';
+import Images from '../theme/Images';
+import RNFS from 'react-native-fs';
+import Share from 'react-native-share';
 
 const HistoryChartScreen = () => {
   const [selectedArrange, setSelectedArrange] = useState('All');
@@ -65,6 +70,28 @@ const HistoryChartScreen = () => {
         <Text style={styles.blackText}>Current: {scanningStatus}</Text>
       </View>
     );
+  }
+
+  async function shareCsvByEmail(
+    fileName: string = 'timestamp_and_temperature',
+  ) {
+    console.log('fileName:', fileName);
+    const filePath = `${RNFS.DocumentDirectoryPath}/${fileName}.csv`;
+    const fileUri = `file://${filePath}`;
+    console.log(`fileUri: ${fileUri}`);
+
+    try {
+      const result = await Share.open({
+        subject: 'Temperature Records',
+        message: 'Please find attached the temperature records.',
+        url: fileUri, // Attach the file using the file URI
+        type: 'text/csv', // Set MIME type as CSV
+      });
+
+      console.log(result);
+    } catch (error) {
+      console.error('Error sharing CSV file:', error);
+    }
   }
 
   function clickOnAll() {
@@ -223,7 +250,7 @@ const HistoryChartScreen = () => {
   const renderGraph = () => {
     return (
       <View style={styles.graphContainer}>
-        <Text style={styles.hoursTxt}>Graph Data</Text>
+        <Text style={styles.hoursTxt}>Hours</Text>
         <BarChartComponent chartData={graphData} edgeHours={18} />
       </View>
     );
@@ -244,6 +271,26 @@ const HistoryChartScreen = () => {
     );
   };
 
+  const renderBtns = () => {
+    return (
+      <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity
+          onPress={() => getAllMeasurements()}
+          style={[styles.scanBtn, {flex: 0.5}]}>
+          <Text style={{color: 'white', fontWeight: '500', fontSize: 18}}>
+            Scan
+          </Text>
+        </TouchableOpacity>
+        <View style={{flex: 0.5, alignItems: 'center'}}>
+          <ButtonView
+            title="Share CSV"
+            image={Images.csv}
+            onPress={() => shareCsvByEmail()}
+          />
+        </View>
+      </View>
+    );
+  };
   return (
     <ScrollView
       contentContainerStyle={styles.container}
@@ -254,15 +301,10 @@ const HistoryChartScreen = () => {
         paddingHorizontal: 10,
       }}>
       {renderTypeSelected()}
+      {renderBtns()}
       {renderGraph()}
       {renderProgreeCircle()}
-      <TouchableOpacity
-        onPress={() => getAllMeasurements()}
-        style={styles.scanBtn}>
-        <Text style={{color: 'white', fontWeight: '500', fontSize: 18}}>
-          Scan
-        </Text>
-      </TouchableOpacity>
+
       {isModalCustom && (
         <CustomModal
           isModal={isModalCustom}
@@ -316,6 +358,7 @@ const styles = StyleSheet.create({
     flex: 0.3,
     width: '100%',
     marginTop: 20,
+    marginBottom: 30,
   },
 
   hoursTxt: {
@@ -335,7 +378,7 @@ const styles = StyleSheet.create({
   },
 
   scanBtn: {
-    height: 54,
+    height: 60,
     borderRadius: 12,
     backgroundColor: '#4cc652',
     shadowColor: '#000',
@@ -350,7 +393,6 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 30,
   },
 
   blackText: {

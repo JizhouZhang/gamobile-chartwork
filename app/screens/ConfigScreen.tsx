@@ -7,12 +7,18 @@ import Share from 'react-native-share';
 import RNFS from 'react-native-fs';
 import ButtonView from '../components/ButtonView';
 import Images from '../theme/Images';
+import ConfirmModal from '../components/ConfirmModal';
+import DelayModal from '../components/DelayModal';
+import NFCPromptModal from '../components/NFCPromptModal';
 
 // Pre-step, call this before any NFC operations
 NfcManager.start();
 
 function ConfigScreen() {
   const [logs, setLogs] = useState([]);
+  const [isModal, setIsModal] = useState(() => false);
+  const [isModalStartTag, setIsModalStartTag] = useState(() => false);
+  const [isModalNFC, setIsModalNFC] = useState(() => false);
   // Add current tag configuration to state
   // const [config, setConfig] = useState<Config>();
   async function sendMsgGetResponse(command: number[]) {
@@ -473,12 +479,13 @@ function ConfigScreen() {
           alignItems: 'center',
         }}
         showsVerticalScrollIndicator={false}>
-        {false &&
-          logs.map((log, index) => (
-            <Text key={index} style={styles.logText}>
-              {log}
-            </Text>
-          ))}
+        <ButtonView
+          title="Start Tag"
+          image={Images.thermometer}
+          onPress={() => {
+            setIsModalStartTag(true);
+          }}
+        />
         <ButtonView
           title="Red Temperature"
           image={Images.thermometer}
@@ -492,7 +499,7 @@ function ConfigScreen() {
         <ButtonView
           title="Reset Tag"
           image={Images.resetTag}
-          onPress={setConfiguration}
+          onPress={() => setIsModal(true)}
         />
         <ButtonView
           title="Get event"
@@ -510,11 +517,34 @@ function ConfigScreen() {
           image={Images.Clearlogs}
           onPress={clearLogs}
         />
-        <ButtonView
-          title="Share CSV"
-          image={Images.csv}
-          onPress={() => shareCsvByEmail()}
+        <View style={{marginTop: 10, marginBottom: 30}}>
+          {logs.map((log, index) => (
+            <Text key={index} style={styles.logText}>
+              {log}
+            </Text>
+          ))}
+        </View>
+        <ConfirmModal
+          isModal={isModal}
+          title="Do you really want to stop the tag and delete the data in the
+            storag?"
+          setIsModal={setIsModal}
+          deleteData={() => {
+            setConfiguration();
+            setIsModal(false);
+          }}
         />
+        <DelayModal
+          isModal={isModalStartTag}
+          setIsModal={setIsModalStartTag}
+          onPressOk={() => {
+            setIsModalStartTag(false);
+            setTimeout(() => {
+              setIsModalNFC(true);
+            }, 500);
+          }}
+        />
+        <NFCPromptModal isModal={isModalNFC} setIsModal={setIsModalNFC} />
       </ScrollView>
     </View>
   );

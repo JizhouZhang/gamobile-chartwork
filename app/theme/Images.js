@@ -10,6 +10,7 @@ const sendMail = require('../icon/sendMail.png');
 const history = require('../icon/history.png');
 const settings = require('../icon/settings.png');
 const phone = require('../icon/phone.png');
+const close = require('../icon/close.png');
 
 export default {
   thermometer,
@@ -24,4 +25,5 @@ export default {
   history,
   settings,
   phone,
+  close,
 };
