@@ -11,6 +11,7 @@ interface CustomModalProps {
 }
 
 const DataDay = [
+  {label: '0', value: '0'},
   {label: '1', value: '1'},
   {label: '2', value: '2'},
   {label: '3', value: '3'},
@@ -43,6 +44,7 @@ const DataDay = [
   {label: '30', value: '30'},
 ];
 const DataHrs = [
+  {label: '0', value: '0'},
   {label: '1', value: '1'},
   {label: '2', value: '2'},
   {label: '3', value: '3'},
@@ -69,6 +71,7 @@ const DataHrs = [
   {label: '24', value: '24'},
 ];
 const DataMints = [
+  {label: '0', value: '0'},
   {label: '1', value: '1'},
   {label: '2', value: '2'},
   {label: '3', value: '3'},

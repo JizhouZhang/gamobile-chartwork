@@ -11,6 +11,7 @@ const history = require('../icon/history.png');
 const settings = require('../icon/settings.png');
 const phone = require('../icon/phone.png');
 const close = require('../icon/close.png');
+const tooltip = require('../icon/tooltip.png');
 
 export default {
   thermometer,
@@ -26,4 +27,5 @@ export default {
   settings,
   phone,
   close,
+  tooltip,
 };

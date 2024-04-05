@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -22,7 +23,7 @@ import ButtonView from '../components/ButtonView';
 import Images from '../theme/Images';
 import RNFS from 'react-native-fs';
 import Share from 'react-native-share';
-
+import {Popable} from 'react-native-popable';
 const HistoryChartScreen = () => {
   const [selectedArrange, setSelectedArrange] = useState('All');
   const [isModalCustom, setIsModalCustom] = useState(false);
@@ -32,6 +33,7 @@ const HistoryChartScreen = () => {
     currentDate - 7 * 24 * 60 * 60 * 1000,
   );
   const [endDateCustom, setEndDateCustom] = useState(new Date());
+  const [isToolTipOpen, setIsToolTipOpen] = useState(() => false);
 
   const {
     temperatureData,
@@ -259,7 +261,19 @@ const HistoryChartScreen = () => {
   const renderProgreeCircle = () => {
     return (
       <View style={styles.processCircleContainer}>
-        <Text style={styles.progressTxt}>Your Achievement Score</Text>
+        <View style={{flexDirection: 'row', alignItems: 'center', margin: 20}}>
+          <Text style={styles.progressTxt}>Your Achievement Score</Text>
+          <Popable
+            style={{marginLeft: 5, width: 150}}
+            action="hover"
+            content="This score represent the average daily hours you wear your brace. A score of 100 means your average daily hours is 18">
+            <Image
+              style={{width: 24, height: 24, marginLeft: 10}}
+              source={Images.tooltip}
+            />
+          </Popable>
+        </View>
+
         <View style={{alignItems: 'center'}}>
           <AchievementProgress chartData={graphData} />
           <Text style={styles.blackText}>
@@ -370,7 +384,6 @@ const styles = StyleSheet.create({
   },
 
   progressTxt: {
-    margin: 20,
     marginBottom: 0,
     fontSize: 16,
     fontWeight: '700',
